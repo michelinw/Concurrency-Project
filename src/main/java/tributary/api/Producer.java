@@ -18,4 +18,16 @@ public interface Producer {
      */
     public void send(String topicId, Object eventContent, String partitionId)
         throws ProducerException, TopicException;
+
+    /**
+     *
+     * @return
+     */
+    public String getProducerId();
+
+    /**
+     *
+     * @return
+     */
+    public String getAllocationType();
 }

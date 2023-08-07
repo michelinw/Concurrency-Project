@@ -22,6 +22,7 @@ public class TributaryTest {
         TributaryFactory.createTopicInstance("topic1", "String");
         Topic topic = TributaryFactory.getTopicInstance("topic1");
         assertEquals("topic1", topic.getTopicId());
+        assertDoesNotThrow(() -> topic.toString());
     }
 
     @Test
@@ -77,9 +78,11 @@ public class TributaryTest {
         topic.createPartition("firstPartition");
         topic.createPartition("secondPartition");
         group1.addConsumer("firstConsumer");
+        assertEquals(group1.getConsumers().get("firstConsumer").getConsumerGroupId(), "group1");
         assertEquals(group1.getConsumers().size(), 1);
         group2.addConsumer("secondConsumer");
         assertEquals(group2.getConsumers().size(), 1);
+        assertDoesNotThrow(() -> group1.getConsumers().get("firstConsumer").toString());
     }
 
     @Test
@@ -172,6 +175,8 @@ public class TributaryTest {
         topic.createPartition("secondPartition");
         TributaryFactory.createProducerInstance("producerOne", "String", "Random");
         assertEquals(TributaryFactory.getProducers().size(), 1);
+        assertEquals(TributaryFactory.getProducerInstance("producerOne").getProducerId(), "producerOne");
+        assertEquals(TributaryFactory.getProducerInstance("producerOne").getAllocationType(), "Random");
         TributaryFactory.deleteProducerInstance("producerOne");
         assertEquals(TributaryFactory.getProducers().size(), 0);
     }
@@ -187,6 +192,13 @@ public class TributaryTest {
         assertEquals(TributaryFactory.getProducers().size(), 1);
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString", "partition");
         assertEquals(topic.getPartitions().get("partition").getMessages().size(), 1);
+        assertThrows(ProducerException.class, () ->
+            TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString", "partition2"));
+        assertThrows(ProducerException.class, () ->
+            TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString", ""));
+        assertThrows(TopicException.class, () ->
+            TributaryFactory.getProducerInstance("producerOne").send("topic2", "sampleEventString", "partition"));
+        assertDoesNotThrow(() -> TributaryFactory.getProducerInstance("producerOne").toString());
     }
 
     @Test
@@ -197,26 +209,26 @@ public class TributaryTest {
         Topic topic = TributaryFactory.getTopicInstance("topic1");
         topic.createConsumerGroup("group1", "Range");
         ConsumerGroup group1 = topic.getConsumerGroupId("group1");
-        topic.createConsumerGroup("group2", "RoundRobin");
-        ConsumerGroup group2 = topic.getConsumerGroupId("group2");
         topic.createPartition("firstPartition");
         topic.createPartition("secondPartition");
+        topic.createPartition("thirdPartition");
         group1.addConsumer("firstConsumer");
-        assertEquals(group1.getConsumers().size(), 1);
-        group2.addConsumer("secondConsumer");
-        assertEquals(group2.getConsumers().size(), 1);
+        group1.addConsumer("secondConsumer");
+        assertEquals(group1.getConsumers().size(), 2);
         TributaryFactory.createProducerInstance("producerOne", "String", "Manual");
         assertEquals(TributaryFactory.getProducers().size(), 1);
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString", "firstPartition");
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString2", "secondPartition");
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString3", "firstPartition");
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString4", "secondPartition");
+        TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString4", "thirdPartition");
         group1.getConsumers().get("firstConsumer").receive("firstPartition");
         group1.getConsumers().get("firstConsumer").receive("secondPartition");
-        group2.getConsumers().get("secondConsumer").receive("firstPartition");
-        group2.getConsumers().get("secondConsumer").receive("secondPartition");
+        group1.getConsumers().get("secondConsumer").receive("thirdPartition");
         assertEquals(group1.getConsumers().get("firstConsumer").getConsumePartitionsOffset().size(), 2);
-        assertEquals(group2.getConsumers().get("secondConsumer").getConsumePartitionsOffset().size(), 2);
+        assertEquals(group1.getConsumers().get("secondConsumer").getConsumePartitionsOffset().size(), 1);
+        assertThrows(ConsumerException.class, () ->
+            group1.getConsumers().get("secondConsumer").receive("firstPartition"));
     }
 
     @Test
@@ -397,6 +409,11 @@ public class TributaryTest {
 
         assertEquals(group1.getConsumers().get("firstConsumer").getConsumePartitionsOffset().size(), 2);
         assertEquals(group2.getConsumers().get("secondConsumer").getConsumePartitionsOffset().size(), 2);
+
+        assertThrows(ConsumerException.class, () ->
+            group1.getConsumers().get("firstConsumer").playback("firstPartition", 3));
+        assertThrows(ConsumerException.class, () ->
+        group1.getConsumers().get("firstConsumer").playback("secondPartition", 3));
     }
 
 
