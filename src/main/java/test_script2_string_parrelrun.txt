@@ -1,0 +1,26 @@
+create topic topic1 Integer
+create partition topic1 part1
+create partition topic1 part2
+create partition topic1 part3
+create partition topic1 part4
+create partition topic1 part5
+show topic topic1
+create consumer group cg1 topic1 RoundRobin
+show consumer group cg1
+create consumer cg1 c1
+create consumer cg1 c2
+create producer pd1 Integer Random
+create producer pd2 Integer Random
+create producer pd3 Integer Random
+parallel produce (pd1,topic1,1),(pd2,topic1,2),(pd3,topic1,3)
+show topic topic1
+show consumer group cg1
+parallel produce (pd1,topic1,4),(pd2,topic1,5),(pd3,topic1,6)
+show topic topic1
+show consumer group cg1
+parallel consume (c1,part1),(c2,part2),(c1,part3),(c2,part4),(c1,part5)
+show topic topic1
+show consumer group cg1
+parallel consume (c1,part1),(c2,part2),(c1,part3)
+show topic topic1
+show consumer group cg1

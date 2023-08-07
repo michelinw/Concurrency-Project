@@ -12,7 +12,7 @@ stages:
 
 lint:
   stage: lint
-  script: 
+  script:
     - gradle checkstyleMain
     - gradle checkstyleTest
   allow_failure: true

@@ -1,0 +1,37 @@
+create topic topic1 Integer
+create partition topic1 part1
+create partition topic1 part2
+create partition topic1 part3
+create partition topic1 part4
+create partition topic1 part5
+show topic topic1
+create consumer group cg1 topic1 RoundRobin
+show consumer group cg1
+create consumer cg1 c1
+delete consumer c1
+create consumer cg1 c1
+create producer pd1 Integer Manual
+produce event pd1 topic1 1 part1
+produce event pd1 topic1 2 part1
+produce event pd1 topic1 3 part2
+produce event pd1 topic1 4 part3
+consume event c1 part1
+consume event c1 part2
+create consumer cg1 c2
+show consumer group cg1
+show topic topic1
+produce event pd1 topic1 5 part1
+produce event pd1 topic1 6 part1
+produce event pd1 topic1 7 part1
+produce event pd1 topic1 8 part2
+produce event pd1 topic1 9 part2
+show topic topic1
+show consumer group cg1
+consume events c1 part1 2
+consume events c1 part1 1
+consume events c2 part2 2
+consume events c2 part2 2
+set consumer group rebalancing cg1 Range
+show topic topic1
+playback c1 part1 1
+show consumer group cg1
