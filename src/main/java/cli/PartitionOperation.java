@@ -1,4 +1,4 @@
-package tributary.cli;
+package cli;
 
 import java.util.ArrayList;
 import tributary.api.Topic;

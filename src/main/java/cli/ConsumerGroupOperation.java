@@ -1,5 +1,5 @@
 
-package tributary.cli;
+package cli;
 
 import java.util.concurrent.ConcurrentHashMap;
 import tributary.api.ConsumerGroup;

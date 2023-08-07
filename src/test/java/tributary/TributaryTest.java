@@ -3,14 +3,14 @@ package tributary;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import cli.ParallelConsumer;
+import cli.ParallelProducer;
 import tributary.api.*;
 import tributary.api.exceptions.ConsumerException;
 import tributary.api.exceptions.ConsumerGroupException;
 import tributary.api.exceptions.ProducerException;
 import tributary.api.exceptions.TopicException;
 import tributary.api.exceptions.TopicException.TopicNotFoundException;
-import tributary.cli.ParallelConsumer;
-import tributary.cli.ParallelProducer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +22,22 @@ public class TributaryTest {
         TributaryFactory.createTopicInstance("topic1", "String");
         Topic topic = TributaryFactory.getTopicInstance("topic1");
         assertEquals("topic1", topic.getTopicId());
+    }
+
+    @Test
+    @DisplayName("Test can't create topic")
+    public void testFailedCreateTopic() throws TopicNotFoundException {
+        TributaryFactory.createTopicInstance("topic1", "String");
+        assertThrows(TopicNotFoundException.class, () -> TributaryFactory.getTopicInstance("topic2"));
+    }
+
+    @Test
+    @DisplayName("Test Delete Topic")
+    public void testDeleteTopic() throws TopicNotFoundException {
+        TributaryFactory.createTopicInstance("topic1", "String");
+        assertEquals(TributaryFactory.getTopics().size(), 1);
+        TributaryFactory.deleteTopicInstance("topic1");
+        assertEquals(TributaryFactory.getTopics().size(), 0);
     }
 
     @Test
@@ -67,6 +83,17 @@ public class TributaryTest {
     }
 
     @Test
+    @DisplayName("Test can't create consumer")
+    public void testFailedCreateConsumer() throws TopicException, ConsumerException, ConsumerGroupException {
+        TributaryFactory.createTopicInstance("topic1", "String");
+        Topic topic = TributaryFactory.getTopicInstance("topic1");
+        topic.createConsumerGroup("group1", "Range");
+        ConsumerGroup group1 = topic.getConsumerGroupId("group1");
+        assertEquals(group1.getConsumers().size(), 0);
+        assertThrows(ConsumerGroupException.class, () -> group1.addConsumer("firstConsumer"));
+    }
+
+    @Test
     @DisplayName("Test delete consumer")
     public void testDeleteConsumer() throws TopicException, ConsumerException, ConsumerGroupException {
         TributaryFactory.createTopicInstance("topic1", "String");
@@ -90,8 +117,54 @@ public class TributaryTest {
     }
 
     @Test
-    @DisplayName("Test create producer")
-    public void testCreateProducer() throws TopicException {
+    @DisplayName("Test can't delete consumer")
+    public void testFailedDeleteConsumer() throws ConsumerException, TopicException, ConsumerGroupException {
+        TributaryFactory.createTopicInstance("topic1", "String");
+        Topic topic = TributaryFactory.getTopicInstance("topic1");
+        topic.createConsumerGroup("group1", "Range");
+        ConsumerGroup group1 = topic.getConsumerGroupId("group1");
+        topic.createConsumerGroup("group2", "RoundRobin");
+        ConsumerGroup group2 = topic.getConsumerGroupId("group2");
+        assertEquals(group1.getConsumers().size(), 0);
+        assertEquals(group2.getConsumers().size(), 0);
+        topic.createPartition("firstPartition");
+        topic.createPartition("secondPartition");
+        group1.addConsumer("firstConsumer");
+        assertEquals(group1.getConsumers().size(), 1);
+        group2.addConsumer("secondConsumer");
+        assertEquals(group2.getConsumers().size(), 1);
+        group1.deleteConsumer("firstConsumer");
+        assertEquals(group1.getConsumers().size(), 0);
+        group2.deleteConsumer("secondConsumer");
+        assertEquals(group2.getConsumers().size(), 0);
+        assertThrows(ConsumerGroupException.class, () -> group2.deleteConsumer("thirdConsumer"));
+        assertDoesNotThrow(() -> group1.toString());
+    }
+
+    @Test
+    @DisplayName("Change rebalance policy")
+    public void testChangeRebalancePolicy() throws ConsumerException, TopicException, ConsumerGroupException {
+        TributaryFactory.createTopicInstance("topic1", "String");
+        Topic topic = TributaryFactory.getTopicInstance("topic1");
+        topic.createConsumerGroup("group1", "Range");
+        ConsumerGroup group1 = topic.getConsumerGroupId("group1");
+        topic.createConsumerGroup("group2", "RoundRobin");
+        ConsumerGroup group2 = topic.getConsumerGroupId("group2");
+        assertEquals(group1.getConsumers().size(), 0);
+        assertEquals(group2.getConsumers().size(), 0);
+        topic.createPartition("firstPartition");
+        topic.createPartition("secondPartition");
+        group1.addConsumer("firstConsumer");
+        assertEquals(group1.getConsumers().size(), 1);
+        group2.addConsumer("secondConsumer");
+        assertEquals(group2.getConsumers().size(), 1);
+        assertDoesNotThrow(() -> group1.setRebalancePolicy("RoundRobin"));
+        assertDoesNotThrow(() -> group2.setRebalancePolicy("RoundRobin"));
+    }
+
+    @Test
+    @DisplayName("Test create and delete producer")
+    public void testCreateDeleteProducer() throws TopicException {
         TributaryFactory.createTopicInstance("topic1", "String");
         Topic topic = TributaryFactory.getTopicInstance("topic1");
         topic.createConsumerGroup("group1", "Range");
@@ -99,11 +172,13 @@ public class TributaryTest {
         topic.createPartition("secondPartition");
         TributaryFactory.createProducerInstance("producerOne", "String", "Random");
         assertEquals(TributaryFactory.getProducers().size(), 1);
+        TributaryFactory.deleteProducerInstance("producerOne");
+        assertEquals(TributaryFactory.getProducers().size(), 0);
     }
 
     @Test
-    @DisplayName("Test produce event")
-    public void testProduceEvent() throws TopicException, ProducerException {
+    @DisplayName("Test produce event string")
+    public void testProduceEventString() throws TopicException, ProducerException {
         TributaryFactory.createTopicInstance("topic1", "String");
         Topic topic = TributaryFactory.getTopicInstance("topic1");
         topic.createConsumerGroup("group1", "Range");
@@ -115,8 +190,9 @@ public class TributaryTest {
     }
 
     @Test
-    @DisplayName("Test consume events")
-    public void testConsumeEvent() throws TopicException, ConsumerException, ConsumerGroupException, ProducerException {
+    @DisplayName("Test consume events strings")
+    public void testConsumeEventString() throws TopicException,
+        ConsumerException, ConsumerGroupException, ProducerException {
         TributaryFactory.createTopicInstance("topic1", "String");
         Topic topic = TributaryFactory.getTopicInstance("topic1");
         topic.createConsumerGroup("group1", "Range");
@@ -135,6 +211,52 @@ public class TributaryTest {
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString2", "secondPartition");
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString3", "firstPartition");
         TributaryFactory.getProducerInstance("producerOne").send("topic1", "sampleEventString4", "secondPartition");
+        group1.getConsumers().get("firstConsumer").receive("firstPartition");
+        group1.getConsumers().get("firstConsumer").receive("secondPartition");
+        group2.getConsumers().get("secondConsumer").receive("firstPartition");
+        group2.getConsumers().get("secondConsumer").receive("secondPartition");
+        assertEquals(group1.getConsumers().get("firstConsumer").getConsumePartitionsOffset().size(), 2);
+        assertEquals(group2.getConsumers().get("secondConsumer").getConsumePartitionsOffset().size(), 2);
+    }
+
+    @Test
+    @DisplayName("Test produce event integer and failure")
+    public void testProduceEventInt() throws TopicException, ProducerException {
+        TributaryFactory.createTopicInstance("topic1", "Integer");
+        Topic topic = TributaryFactory.getTopicInstance("topic1");
+        topic.createConsumerGroup("group1", "Range");
+        topic.createPartition("partition");
+        TributaryFactory.createProducerInstance("producerOne", "Integer", "Manual");
+        assertEquals(TributaryFactory.getProducers().size(), 1);
+        TributaryFactory.getProducerInstance("producerOne").send("topic1", 1, "partition");
+        assertEquals(topic.getPartitions().get("partition").getMessages().size(), 1);
+        TributaryFactory.createProducerInstance("producerTwo", "String", "Manual");
+        assertThrows(ProducerException.class, () ->
+            TributaryFactory.getProducerInstance("producerTwo").send("topic1", "sampleEvent", "partition"));
+    }
+
+    @Test
+    @DisplayName("Test consume events integers")
+    public void testConsumeEventInt() throws TopicException,
+        ConsumerException, ConsumerGroupException, ProducerException {
+        TributaryFactory.createTopicInstance("topic1", "Integer");
+        Topic topic = TributaryFactory.getTopicInstance("topic1");
+        topic.createConsumerGroup("group1", "Range");
+        ConsumerGroup group1 = topic.getConsumerGroupId("group1");
+        topic.createConsumerGroup("group2", "RoundRobin");
+        ConsumerGroup group2 = topic.getConsumerGroupId("group2");
+        topic.createPartition("firstPartition");
+        topic.createPartition("secondPartition");
+        group1.addConsumer("firstConsumer");
+        assertEquals(group1.getConsumers().size(), 1);
+        group2.addConsumer("secondConsumer");
+        assertEquals(group2.getConsumers().size(), 1);
+        TributaryFactory.createProducerInstance("producerOne", "Integer", "Manual");
+        assertEquals(TributaryFactory.getProducers().size(), 1);
+        TributaryFactory.getProducerInstance("producerOne").send("topic1", 1, "firstPartition");
+        TributaryFactory.getProducerInstance("producerOne").send("topic1", 2, "secondPartition");
+        TributaryFactory.getProducerInstance("producerOne").send("topic1", 3, "firstPartition");
+        TributaryFactory.getProducerInstance("producerOne").send("topic1", 4, "secondPartition");
         group1.getConsumers().get("firstConsumer").receive("firstPartition");
         group1.getConsumers().get("firstConsumer").receive("secondPartition");
         group2.getConsumers().get("secondConsumer").receive("firstPartition");
@@ -276,6 +398,7 @@ public class TributaryTest {
         assertEquals(group1.getConsumers().get("firstConsumer").getConsumePartitionsOffset().size(), 2);
         assertEquals(group2.getConsumers().get("secondConsumer").getConsumePartitionsOffset().size(), 2);
     }
+
 
 
 }

@@ -1,5 +1,5 @@
 
-package tributary.cli;
+package cli;
 
 import tributary.api.Consumer;
 

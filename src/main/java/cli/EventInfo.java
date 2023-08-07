@@ -1,4 +1,4 @@
-package tributary.cli;
+package cli;
 
 import org.json.JSONObject;
 
