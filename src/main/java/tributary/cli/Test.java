@@ -83,7 +83,7 @@ public class Test {
 
     }
 
-public static void test1pr() throws TopicException, ConsumerGroupException, ProducerException, ConsumerException {
+    public static void test1pr() throws TopicException, ConsumerGroupException, ProducerException, ConsumerException {
         TopicOperation.createTopic("Topic1", "String");
 
         System.out.println(TopicOperation.getTopicInfo("Topic1").toString());
@@ -124,20 +124,6 @@ public static void test1pr() throws TopicException, ConsumerGroupException, Prod
 
         ProducerOperation.sendEvent("PD1", "Topic1", "TEST MESSAGE PD1-6", "P1");
         System.out.println(TopicOperation.getTopicInfo("Topic1").toString());
-
-        // System.out.println(ConsumerOperation.getConsumer("C1").toString());
-
-        // System.out.println(ConsumerOperation.receiveEvent("C1", "P1").toString());
-        // System.out.println("After receiving event1-1");
-        // System.out.println(ConsumerOperation.getConsumer("C1").toString());
-
-        // System.out.println(ConsumerOperation.receiveEvent("C1", "P1").toString());
-        // System.out.println("After receiving event1-2");
-        // System.out.println(ConsumerOperation.getConsumer("C1").toString());
-
-        // System.out.println(ConsumerOperation.receiveEvent("C1", "P1").toString());
-        // System.out.println("After receiving event1-3");
-        // System.out.println(ConsumerOperation.getConsumer("C1").toString());
     }
 
     public static void test1() throws TopicException, ConsumerGroupException, ConsumerException {
@@ -285,7 +271,6 @@ public static void test1pr() throws TopicException, ConsumerGroupException, Prod
 
         System.out.println("Before delete");
         ConsumerOperation.deleteConsumer("G1", "C1");
-        //System.out.println(ConsumerOperation.getConsumer("C1").toString());
         System.out.println(ConsumerOperation.getConsumer("C2").toString());
         System.out.println(ConsumerOperation.getConsumer("C3").toString());
         System.out.println(ConsumerOperation.getConsumer("C4").toString());
