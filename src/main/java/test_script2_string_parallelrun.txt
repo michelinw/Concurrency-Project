@@ -12,10 +12,10 @@ create consumer cg1 c2
 create producer pd1 Integer Random
 create producer pd2 Integer Random
 create producer pd3 Integer Random
-parallel produce (pd1,topic1,1),(pd2,topic1,2),(pd3,topic1,3)
+parallel produce (pd1,topic1,event1),(pd2,topic1,event2),(pd3,topic1,event3)
 show topic topic1
 show consumer group cg1
-parallel produce (pd1,topic1,4),(pd2,topic1,5),(pd3,topic1,6)
+parallel produce (pd1,topic1,event4),(pd2,topic1,event5),(pd3,topic1,event6)
 show topic topic1
 show consumer group cg1
 parallel consume (c1,part1),(c2,part2),(c1,part3),(c2,part4),(c1,part5)

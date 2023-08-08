@@ -14,7 +14,7 @@ import tributary.api.exceptions.TopicException;
 
 /**
  *
- * @author Michael Wang
+ * @author Michael Wang z5421148
  */
 public class TributaryCLI {
 
@@ -135,7 +135,7 @@ public class TributaryCLI {
                     String topic = params[i * 3 + 3];
                     String event = params[i * 3 + 4];
                     ParallelProducer parallelProducer = new ParallelProducer(producer,
-                        topic, event + String.valueOf(i), null);
+                        topic, event + String.valueOf(i), "");
                     parallelProducer.start();
                 }
             } else if (line.startsWith("parallel consume") && params.length >= 4) {
@@ -174,7 +174,9 @@ public class TributaryCLI {
     private static void runPlayback(String consumer, String partition, int offset) {
         try {
             ArrayList<Message> messages = ConsumerOperation.playbackEvent(consumer, partition, offset);
-            for (int i = 0; i < messages.size(); i++) {
+            Consumer con1 = ConsumerOperation.getConsumer(consumer);
+            int currentOffset = con1.getConsumePartitionsOffset().get(partition);
+            for (int i = 0; i < currentOffset - 1; i++) {
                 System.out.println("playback envent count no." + i);
                 System.out.println(messages.get(i).toString());
             }

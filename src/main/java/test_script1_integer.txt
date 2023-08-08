@@ -18,14 +18,12 @@ produce event pd1 topic1 4 part3
 consume event c1 part1
 consume event c1 part2
 create consumer cg1 c2
-show consumer group cg1
 show topic topic1
 produce event pd1 topic1 5 part1
 produce event pd1 topic1 6 part1
 produce event pd1 topic1 7 part1
 produce event pd1 topic1 8 part2
 produce event pd1 topic1 9 part2
-show topic topic1
 show consumer group cg1
 consume events c1 part1 2
 consume events c1 part1 1

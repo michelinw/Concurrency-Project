@@ -20,7 +20,7 @@ public class ParallelConsumer extends Thread {
     @Override
     public void run() {
         try {
-            // Thread will wait until receive 10 events then exists
+            // Thread will wait until receive 10 events then exits
             for (int i = 0; i < 10; i++) {
                 System.out.println(
                     "Thread " + Thread.currentThread().getId() + "," + " receive "

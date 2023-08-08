@@ -41,7 +41,7 @@ public class PartitionImpl implements Partition {
     }
 
     /**
-     * Remove message from the partition
+     * peek messages in partition
      * @param messageOffset
      */
     @Override
