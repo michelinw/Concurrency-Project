@@ -17,4 +17,24 @@ public interface Message {
      * @return
      */
     public Object getContent();
+
+    public String getId();
+
+    /**
+     *
+     * @return
+     */
+    public String getPayloadType();
+
+    /**
+     *
+     * @return
+     */
+    public String getKey();
+
+    /**
+     *
+     * @return
+     */
+    public String getDatetime();
 }

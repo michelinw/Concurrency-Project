@@ -40,4 +40,10 @@ public interface Consumer {
      */
     public LinkedHashMap<String, Integer> getConsumePartitionsOffset();
 
+        /**
+     * get consumer id
+     * @return consumer id
+     */
+    public String getConsumerId();
+
 }

@@ -96,4 +96,9 @@ public class TributaryFactory {
     public static final ConcurrentHashMap<String, Producer> getProducers() {
         return PRODUCERS;
     }
+
+    public static final void clear() {
+        TOPICS.clear();
+        PRODUCERS.clear();
+    }
 }

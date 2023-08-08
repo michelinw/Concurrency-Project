@@ -48,4 +48,16 @@ public interface ConsumerGroup {
      */
     public LinkedHashMap<String, Consumer> getConsumers();
 
+        /**
+     *
+     * @return
+     */
+    public String getConsumerGroupId();
+
+    /**
+     *
+     * @return
+     */
+    public String getRebalancePolicy();
+
 }
