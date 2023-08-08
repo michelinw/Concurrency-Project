@@ -72,6 +72,13 @@ public class ConsumerImpl implements Consumer {
         return consumePartitionsOffset;
     }
 
+
+    /**
+     * Receive message from the partition
+     * @param partitionId
+     * @return message
+     * @throws ConsumerException
+    */
     @Override
     public Message receive(String partitionId) throws ConsumerException {
         Message msg = null;
@@ -100,6 +107,13 @@ public class ConsumerImpl implements Consumer {
         return msg;
     }
 
+    /**
+     * Playback messages from the partition
+     * @param partitionId
+     * @param offset
+     * @return
+     * @throws ConsumerException
+     */
     @Override
     public ArrayList<Message> playback(String partitionId, int offset) throws ConsumerException {
         if (consumePartitions.containsKey(partitionId)) {

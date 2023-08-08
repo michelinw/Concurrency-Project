@@ -12,19 +12,8 @@ import tributary.api.exceptions.TopicException;
 
 public class ProducerImpl implements Producer {
 
-    /**
-     *
-     */
     private String producerId;
-
-    /**
-     *
-     */
     private String allocationType;
-
-    /**
-     *
-     */
     private String payloadType;
 
     /**
@@ -74,6 +63,14 @@ public class ProducerImpl implements Producer {
         return str;
     }
 
+    /**
+     * Send event to the topic with partition id
+     * @param topicId
+     * @param eventContent
+     * @param partitionId
+     * @throws ProducerException
+     * @throws TopicException
+     */
     @Override
     public void send(String topicId, Object eventContent, String partitionId) throws ProducerException, TopicException {
         TopicImpl topic = (TopicImpl) TributaryFactory.getTopicInstance(topicId);

@@ -14,27 +14,31 @@ public interface Message {
 
     /**
      *
-     * @return
+     * @return content of the message
      */
     public Object getContent();
 
+    /**
+     *
+     * @return id of the message
+     */
     public String getId();
 
     /**
      *
-     * @return
+     * @return payload type
      */
     public String getPayloadType();
 
     /**
      *
-     * @return
+     * @return key of the message
      */
     public String getKey();
 
     /**
      *
-     * @return
+     * @return datetime of the message
      */
     public String getDatetime();
 }

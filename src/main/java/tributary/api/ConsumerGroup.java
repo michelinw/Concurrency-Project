@@ -12,14 +12,14 @@ import tributary.api.exceptions.TopicException;
  */
 public interface ConsumerGroup {
     /**
-     *
+     * Set rebalance policy
      * @param rebalancePolicy
      * @throws TopicException
      */
     public void setRebalancePolicy(String rebalancePolicy) throws TopicException;
 
     /**
-     *
+     * Add consumer to the consumer group
      * @param consumerId
      * @throws TopicException
      * @throws ConsumerGroupException
@@ -28,7 +28,7 @@ public interface ConsumerGroup {
         throws TopicException, ConsumerException, ConsumerGroupException;
 
     /**
-     *
+     * Remove consumer from the consumer group
      * @param consumerId
      * @throws TopicException
      * @throws ConsumerGroupException
@@ -37,26 +37,26 @@ public interface ConsumerGroup {
         throws TopicException, ConsumerGroupException;
 
     /**
-     *
+     * Rebalance consumers in the consumer group
      * @throws TopicException
      */
     public void rebalanceConsumers() throws TopicException;
 
     /**
      *
-     * @return
+     * @return consumers in the consumer group
      */
     public LinkedHashMap<String, Consumer> getConsumers();
 
-        /**
+    /**
      *
-     * @return
+     * @return consumer group id
      */
     public String getConsumerGroupId();
 
     /**
      *
-     * @return
+     * @return rebalance policy
      */
     public String getRebalancePolicy();
 

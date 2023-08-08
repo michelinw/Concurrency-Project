@@ -7,19 +7,12 @@ import tributary.api.Partition;
 
 public class PartitionImpl implements Partition {
 
-    /**
-     *
-     */
     private String partitionId;
-
-    /**
-     *
-     */
     private CopyOnWriteArrayList<Message> messages;
 
     /**
      *
-     * @return
+     * @return partition id
      */
     public String getPartitionId() {
         return partitionId;
@@ -27,7 +20,7 @@ public class PartitionImpl implements Partition {
 
     /**
      *
-     * @return
+     * @return messages in the partition
      */
     public CopyOnWriteArrayList<Message> getMessages() {
         return messages;
@@ -38,12 +31,19 @@ public class PartitionImpl implements Partition {
         this.messages = new CopyOnWriteArrayList<>();
     }
 
-
+    /**
+     * Add message to the partition
+     * @param msg
+     */
     @Override
     public void addMessage(Message msg) {
         messages.add(msg);
     }
 
+    /**
+     * Remove message from the partition
+     * @param messageOffset
+     */
     @Override
     public Message peekMessage(int messageOffset) {
         int totalMsg = messages.size();

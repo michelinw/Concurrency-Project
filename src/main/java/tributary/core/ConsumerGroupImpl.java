@@ -15,24 +15,10 @@ import tributary.api.exceptions.TopicException;
 
 public class ConsumerGroupImpl implements ConsumerGroup {
 
-    /**
-     *
-     */
     private String topicId;
-
-    /**
-     *
-     */
     private String consumerGroupId;
-
-    /**
-     *
-     */
     private String rebalancePolicy;
-
-
     private LinkedHashMap<String, Consumer> consumers;
-
     private ConcurrentHashMap<String, Integer> allPartitionsOffset;
 
     /**
@@ -49,37 +35,29 @@ public class ConsumerGroupImpl implements ConsumerGroup {
         this.allPartitionsOffset = new ConcurrentHashMap<>();
     }
 
-    /**
-     *
-     * @return
-     */
     public String getConsumerGroupId() {
         return consumerGroupId;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getRebalancePolicy() {
         return rebalancePolicy;
     }
 
+    /**
+     * get consuming partitions
+     * @return
+     * @throws TopicException
+     */
     private int getPartionsSize() throws TopicException {
         TopicImpl topic = (TopicImpl) TributaryFactory.getTopicInstance(topicId);
         LinkedHashMap<String, Partition> parts = topic.getPartitions();
         return parts.size();
     }
 
-
-    // upon rebalancing, the consumer group will need to know the current offset of all partitions
-    // this method will refresh the allPartitionsOffset map
-    // this method is called by rebalanceConsumers()
-    // this method is called by addConsumer()
-    // this method is called by deleteConsumer()
-    // this method is called by setRebalancePolicy()
-    // this method is called by getConsumers()
-    // store temp offset in allPartitionsOffset
+    /**
+     * refresh all partition offset
+     * @returns
+     */
     private void refreshAllPartitionOffset() {
         allPartitionsOffset.clear();
         for (String consumerKey : consumers.keySet()) {
@@ -92,6 +70,10 @@ public class ConsumerGroupImpl implements ConsumerGroup {
         }
     }
 
+    /**
+     * rebalance consumers
+     * @throws TopicException
+     */
     @Override
     public void rebalanceConsumers() throws TopicException {
         int consumerSize = consumers.size();
@@ -144,7 +126,12 @@ public class ConsumerGroupImpl implements ConsumerGroup {
         }
     }
 
-    // create consumer, refresh offset, add into consumers, rebalance
+    /**
+     * Add consumer to the consumer group
+     * @param consumerId
+     * @throws TopicException
+     * @throws ConsumerGroupException
+     */
     @Override
     public void addConsumer(String consumerId) throws TopicException, ConsumerGroupException, ConsumerException {
         if (consumers.size() < getPartionsSize()) {
@@ -161,6 +148,12 @@ public class ConsumerGroupImpl implements ConsumerGroup {
         }
     }
 
+    /**
+     * Remove consumer from the consumer group
+     * @param consumerId
+     * @throws TopicException
+     * @throws ConsumerGroupException
+     */
     @Override
     public void deleteConsumer(String consumerId) throws TopicException, ConsumerGroupException {
         if (consumers.containsKey(consumerId)) {
@@ -174,6 +167,11 @@ public class ConsumerGroupImpl implements ConsumerGroup {
         }
     }
 
+    /**
+     * Set rebalance policy
+     * @param rebalancePolicy
+     * @throws TopicException
+     */
     @Override
     public void setRebalancePolicy(String rebalancePolicy) throws TopicException {
         if (rebalancePolicy != this.rebalancePolicy) {
@@ -183,6 +181,10 @@ public class ConsumerGroupImpl implements ConsumerGroup {
         }
     }
 
+    /**
+     *
+     * @return consumers in the consumer group
+     */
     @Override
     public LinkedHashMap<String, Consumer> getConsumers() {
         return consumers;

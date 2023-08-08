@@ -12,7 +12,7 @@ import tributary.api.exceptions.ConsumerException;
  */
 public interface Consumer {
     /**
-     *
+     * Receive message from the partition
      * @param partitionId
      * @return message
      * @throws ConsumerException
@@ -20,7 +20,7 @@ public interface Consumer {
     public Message receive(String partitionId) throws ConsumerException;
 
     /**
-     *
+     * Playback messages from the partition
      * @param partitionId
      * @param offset
      * @return
@@ -30,18 +30,18 @@ public interface Consumer {
 
     /**
      *
-     * @return String
+     * @return consumer group id
      */
     public String getConsumerGroupId();
 
     /**
      *
-     * @return String
+     * @return offset of the partition consumed by the consumer
      */
     public LinkedHashMap<String, Integer> getConsumePartitionsOffset();
 
-        /**
-     * get consumer id
+    /**
+     *
      * @return consumer id
      */
     public String getConsumerId();

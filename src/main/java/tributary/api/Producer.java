@@ -21,13 +21,13 @@ public interface Producer {
 
     /**
      *
-     * @return
+     * @return producer id
      */
     public String getProducerId();
 
     /**
      *
-     * @return
+     * @return payload type
      */
     public String getAllocationType();
 }

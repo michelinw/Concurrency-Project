@@ -15,11 +15,9 @@ public class TributaryFactory {
 
     private static final ConcurrentHashMap<String, Topic> TOPICS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, Producer> PRODUCERS = new ConcurrentHashMap<>();
-    // we could use this factory to create everything, but then code would be repeated. If we wish to extend this api
-    //  we can implement, e.g., a consumer group hashmap here, create some more vairables to check for types,
-    // can use obj -
+
     /**
-     *
+     * create topic instance by topic id and event payload type
      * @param topicId
      * @param eventPayloadType
      */
@@ -29,7 +27,7 @@ public class TributaryFactory {
     }
 
     /**
-     *
+     * get topic instance by topic id
      * @param topicId
      * @return
      * @throws TopicException.TopicNotFoundException
@@ -72,7 +70,7 @@ public class TributaryFactory {
     }
 
     /**
-     *
+     * get producer instance by producer id from hash map
      * @param producerId
      * @return
      */
@@ -81,7 +79,7 @@ public class TributaryFactory {
     }
 
     /**
-     *
+     * delete producer instance by producer id from hash map
      * @param producerId
      * @return
      */
@@ -90,13 +88,16 @@ public class TributaryFactory {
     }
 
     /**
-     *
+     * Return the current producers
      * @return all producers in hash map
      */
     public static final ConcurrentHashMap<String, Producer> getProducers() {
         return PRODUCERS;
     }
 
+    /**
+     * clear all topics and producers
+     */
     public static final void clear() {
         TOPICS.clear();
         PRODUCERS.clear();

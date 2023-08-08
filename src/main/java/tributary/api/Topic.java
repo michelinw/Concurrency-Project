@@ -60,5 +60,9 @@ public interface Topic {
      */
     public ConsumerGroup getConsumerGroupId(String string);
 
+    /**
+     *
+     * @return all partitions in the topic
+     */
     public LinkedHashMap<String, Partition> getPartitions();
 }

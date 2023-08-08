@@ -75,12 +75,24 @@ public class TopicImpl implements Topic  {
         return consumerGroups;
     }
 
+    /**
+     *
+     * @param partitionId
+     * @return
+     * @throws TopicException
+     */
     @Override
     public void createPartition(String partitionId) throws TopicException {
         PartitionImpl partition = new PartitionImpl(partitionId);
         this.addPartition(partition);
     }
 
+    /**
+     *
+     * @param partition
+     * @return
+     * @throws TopicException
+     */
     @Override
     public void addPartition(Partition partition) throws TopicException {
         partitions.put(((PartitionImpl) partition).getPartitionId(), partition);
@@ -89,12 +101,23 @@ public class TopicImpl implements Topic  {
         }
     }
 
+    /**
+     *
+     * @param consumerGroupId
+     * @param rebalancePolicy
+     * @return
+     * @throws TopicException
+     */
     @Override
     public void createConsumerGroup(String consumerGroupId, String rebalancePolicy) {
         ConsumerGroup consumerGroup = new ConsumerGroupImpl(topicId, consumerGroupId, rebalancePolicy);
         consumerGroups.put(consumerGroupId, consumerGroup);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<String> getPartitionListing() {
         ArrayList<String> partitionList = new ArrayList<>();
@@ -114,9 +137,14 @@ public class TopicImpl implements Topic  {
         return str;
     }
 
+    /**
+     *
+     * @param string
+     * @return
+     */
     @Override
-    public ConsumerGroup getConsumerGroupId(String string) {
-        return consumerGroups.get(string);
+    public ConsumerGroup getConsumerGroupId(String consumerId) {
+        return consumerGroups.get(consumerId);
     }
 
 }

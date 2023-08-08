@@ -19,9 +19,13 @@ public interface Partition {
     /**
      *
      * @param messageOffset
-     * @return
+     * @return message at the offset
      */
     public Message peekMessage(int messageOffset);
 
+    /**
+     *
+     * @return all messages in the partition
+     */
     public CopyOnWriteArrayList<Message> getMessages() throws TopicException;
 }

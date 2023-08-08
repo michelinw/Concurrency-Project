@@ -9,34 +9,12 @@ import tributary.api.serialization.Deserializer;
 import tributary.api.serialization.Serializer;
 
 public class MessageImpl implements Message {
-/**
-     *
-     */
+
     private String id;
-
-    /**
-     *
-     */
     private String payloadType;
-
-    /**
-     *
-     */
     private String key;
-
-    /**
-     *
-     */
     private String content;
-
-    /**
-     *
-     */
     private String datetime;
-
-    /**
-     *
-     */
     private String serializerPackageName = "tributary.api.serialization";
 
     /**
@@ -55,7 +33,7 @@ public class MessageImpl implements Message {
 
     /**
      *
-     * @return
+     * @return id of the message
      */
     public String getId() {
         return id;
@@ -63,7 +41,7 @@ public class MessageImpl implements Message {
 
     /**
      *
-     * @return
+     * @return payload type of the message
      */
     public String getPayloadType() {
         return payloadType;
@@ -71,7 +49,7 @@ public class MessageImpl implements Message {
 
     /**
      *
-     * @return
+     * @return key of the message (partition key)
      */
     public String getKey() {
         return key;
@@ -79,12 +57,16 @@ public class MessageImpl implements Message {
 
     /**
      *
-     * @return
+     * @return content of the message
      */
     public String getDatetime() {
         return datetime;
     }
 
+    /**
+     *
+     * @return content of the message (deserialized)
+     */
     @Override
     public Object getContent() {
         try {
@@ -99,6 +81,10 @@ public class MessageImpl implements Message {
         return "";
     }
 
+    /**
+     * Set content of the message (serialized)
+     * @param value
+     */
     @Override
     public void setContent(Object value) {
         try {
