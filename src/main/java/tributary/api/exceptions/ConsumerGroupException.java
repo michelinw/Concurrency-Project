@@ -16,7 +16,7 @@ public class ConsumerGroupException extends Exception {
     }
 
     /**
-     *
+     * A class used to represent the exceptions during consumer group operations
      */
     public static class ConsumerGroupNotFoundException extends ConsumerGroupException {
 

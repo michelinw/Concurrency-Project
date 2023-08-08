@@ -16,7 +16,7 @@ public class ConsumerException extends Exception {
     }
 
     /**
-     *
+     * A class used to represent the exceptions during consumer operations
      */
     public static class NoUnreadMessageException extends ConsumerException {
 

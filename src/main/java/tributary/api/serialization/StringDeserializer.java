@@ -8,6 +8,11 @@ import java.io.UnsupportedEncodingException;
 public class StringDeserializer implements Deserializer<String> {
     private String encoding = "UTF8";
 
+    /**
+     * String deserializer class encoding defaults to UTF8
+     * @param encoding
+     * @return String deserialized from byte array
+     */
     @Override
     public String deserialize(byte[] data) {
         try {

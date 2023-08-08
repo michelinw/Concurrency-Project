@@ -6,6 +6,11 @@ package tributary.api.serialization;
  */
 public class IntegerSerializer implements Serializer<Integer> {
 
+    /**
+     * Serialize Integer to byte array
+     * @param data
+     * @return byte[] data in UTF8 encoding
+     */
     @Override
     public byte[] serialize(Integer data) {
         if (data == null)

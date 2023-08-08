@@ -15,7 +15,7 @@ public class ProducerException extends Exception {
     }
 
     /**
-     *
+     * A class used to represent the exceptions during producer operations
      */
     public static class NotExistTopicException extends ProducerException {
 

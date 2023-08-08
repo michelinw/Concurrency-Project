@@ -15,7 +15,7 @@ public class MessageException extends Exception {
     }
 
     /**
-     * Unsupport serialization exception
+     * Unsupported serialization exception
      */
     public static class SerializationException extends ConsumerException {
 

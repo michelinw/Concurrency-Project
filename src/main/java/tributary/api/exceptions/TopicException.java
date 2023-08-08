@@ -15,7 +15,7 @@ public class TopicException extends Exception {
     }
 
     /**
-     *
+     * A class used to represent the exceptions during topic operations
      */
     public static class TopicNotFoundException extends TopicException {
 

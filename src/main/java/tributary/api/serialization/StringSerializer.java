@@ -9,6 +9,11 @@ import java.io.UnsupportedEncodingException;
 public class StringSerializer implements Serializer<String> {
     private final String encoding = "UTF8";
 
+    /**
+     * Serialize String to byte array
+     * @param data
+     * @return byte[] data in UTF8 encoding
+     */
     @Override
     public byte[] serialize(String data) {
 
